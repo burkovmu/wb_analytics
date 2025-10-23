@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "wb_analytics_project/wsgi.py",
+      "src": "api/index.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "wb_analytics_project/wsgi.py"
+      "dest": "api/index.py"
     }
   ]
 }
