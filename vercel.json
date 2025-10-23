@@ -2,26 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "50mb"
-      }
+      "src": "wb_analytics_project/wsgi.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
       "src": "/(.*)",
-      "dest": "api/index.py"
+      "dest": "wb_analytics_project/wsgi.py"
     }
-  ],
-  "env": {
-    "DJANGO_SETTINGS_MODULE": "wb_analytics_project.settings",
-    "PYTHONPATH": "$PYTHONPATH:.",
-    "VERCEL": "1"
-  }
+  ]
 }
