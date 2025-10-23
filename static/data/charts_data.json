@@ -1,0 +1,94 @@
+{
+  "sales_by_day": [
+    {
+      "day": "2025-10-09",
+      "total_sales": 156211
+    },
+    {
+      "day": "2025-10-10",
+      "total_sales": 169332
+    },
+    {
+      "day": "2025-10-11",
+      "total_sales": 136130
+    },
+    {
+      "day": "2025-10-12",
+      "total_sales": 87900
+    },
+    {
+      "day": "2025-10-13",
+      "total_sales": 142787
+    },
+    {
+      "day": "2025-10-14",
+      "total_sales": 191065
+    },
+    {
+      "day": "2025-10-15",
+      "total_sales": 171255
+    },
+    {
+      "day": "2025-10-16",
+      "total_sales": 134051
+    },
+    {
+      "day": "2025-10-17",
+      "total_sales": 123000
+    },
+    {
+      "day": "2025-10-18",
+      "total_sales": 124934
+    },
+    {
+      "day": "2025-10-19",
+      "total_sales": 162129
+    },
+    {
+      "day": "2025-10-20",
+      "total_sales": 89533
+    },
+    {
+      "day": "2025-10-21",
+      "total_sales": 90502
+    },
+    {
+      "day": "2025-10-22",
+      "total_sales": 146805
+    },
+    {
+      "day": "2025-10-23",
+      "total_sales": 192403
+    }
+  ],
+  "margin_by_product": [
+    {
+      "brand": "Ингаляторы",
+      "total_margin": 395815.44
+    },
+    {
+      "brand": "Тонометры",
+      "total_margin": 382186.87
+    },
+    {
+      "brand": "Тонометры",
+      "total_margin": 309937.16
+    },
+    {
+      "brand": "Отпугиватели собак",
+      "total_margin": 213868.15
+    },
+    {
+      "brand": "Web-камеры",
+      "total_margin": 77337.62
+    },
+    {
+      "brand": "Web-камеры",
+      "total_margin": 21485.21
+    },
+    {
+      "brand": "Web-камеры",
+      "total_margin": 3009.02
+    }
+  ]
+}

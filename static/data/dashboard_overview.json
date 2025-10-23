@@ -1,0 +1,93 @@
+{
+  "summary": {
+    "total_revenue": 2109961.24,
+    "total_orders": 2606,
+    "average_margin": -0.3157,
+    "total_products": 23,
+    "average_check_after_spp": 809.66,
+    "sales_minus_returns_count": 2606,
+    "margin_percent_with_spp": -0.3157
+  },
+  "top_products": [
+    {
+      "brand": "Best home smart",
+      "subject": "Ингаляторы",
+      "article": "ingaliator",
+      "sales": 586,
+      "revenue": 514062.04,
+      "margin": 395815.44
+    },
+    {
+      "brand": "Best home smart",
+      "subject": "Тонометры",
+      "article": "tonometrzap",
+      "sales": 543,
+      "revenue": 544345.86,
+      "margin": 382186.87
+    },
+    {
+      "brand": "Best home smart",
+      "subject": "Тонометры",
+      "article": "tonometr",
+      "sales": 773,
+      "revenue": 547605.05,
+      "margin": 309937.16
+    },
+    {
+      "brand": "Best home smart",
+      "subject": "Отпугиватели собак",
+      "article": "feardog",
+      "sales": 520,
+      "revenue": 293147.93,
+      "margin": 213868.15
+    },
+    {
+      "brand": "Best home smart",
+      "subject": "Web-камеры",
+      "article": "webkam4k",
+      "sales": 128,
+      "revenue": 148922.22,
+      "margin": 77337.62
+    },
+    {
+      "brand": "Best home smart",
+      "subject": "Web-камеры",
+      "article": "webcamsilver4ks",
+      "sales": 39,
+      "revenue": 42911.15,
+      "margin": 21485.21
+    },
+    {
+      "brand": "Best home smart",
+      "subject": "Web-камеры",
+      "article": "webcam2kpriam",
+      "sales": 9,
+      "revenue": 5572.0,
+      "margin": 3009.02
+    },
+    {
+      "brand": "Best home smart",
+      "subject": "Весы детские",
+      "article": "vesdet",
+      "sales": 4,
+      "revenue": 6251.39,
+      "margin": 2376.44
+    },
+    {
+      "brand": "Best home smart",
+      "subject": "Ванночки для ног",
+      "article": "vannachka",
+      "sales": 2,
+      "revenue": 4412.6,
+      "margin": 1363.48
+    },
+    {
+      "brand": "Best home smart",
+      "subject": "Пароочистители",
+      "article": "parchist2",
+      "sales": 1,
+      "revenue": 1786.0,
+      "margin": 1316.94
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "brand": "Best home smart",
+    "total_revenue": 2847392.15,
+    "total_orders": 2487,
+    "average_margin": 0.5234,
+    "total_products": 23,
+    "margin_percent_with_spp": 0.5234,
+    "average_check_after_spp": 1145.67,
+    "sales_minus_returns_count": 2487
+  }
+]

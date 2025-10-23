@@ -1,0 +1,1069 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WB Analytics Dashboard</title>
+    
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            /* Modern Color Palette */
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #06b6d4;
+            
+            /* Neutral Colors */
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            
+            /* Typography */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            
+            /* Spacing */
+            --spacing-1: 0.25rem;
+            --spacing-2: 0.5rem;
+            --spacing-3: 0.75rem;
+            --spacing-4: 1rem;
+            --spacing-5: 1.25rem;
+            --spacing-6: 1.5rem;
+            --spacing-8: 2rem;
+            --spacing-10: 2.5rem;
+            --spacing-12: 3rem;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Modern Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 280px;
+            background: linear-gradient(180deg, var(--gray-900) 0%, var(--gray-800) 100%);
+            box-shadow: var(--shadow-xl);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar-header {
+            padding: var(--spacing-6);
+            border-bottom: 1px solid var(--gray-700);
+            text-align: center;
+        }
+
+        .sidebar-brand {
+            color: white;
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-3);
+        }
+
+        .sidebar-brand i {
+            font-size: var(--font-size-2xl);
+            color: var(--primary-color);
+        }
+
+        .sidebar-nav {
+            padding: var(--spacing-4) 0;
+        }
+
+        .nav-item {
+            margin: var(--spacing-1) var(--spacing-4);
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-3) var(--spacing-4);
+            color: var(--gray-300);
+            text-decoration: none;
+            border-radius: var(--radius-lg);
+            transition: all 0.3s ease;
+            font-weight: 500;
+            gap: var(--spacing-3);
+        }
+
+        .nav-link:hover {
+            background: var(--gray-700);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-link i {
+            font-size: var(--font-size-lg);
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 80px;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: white;
+            box-shadow: var(--shadow-sm);
+            padding: var(--spacing-4) var(--spacing-6);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .top-nav-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-toggle {
+            background: none;
+            border: none;
+            font-size: var(--font-size-lg);
+            color: var(--gray-600);
+            cursor: pointer;
+            padding: var(--spacing-2);
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+        }
+
+        .nav-toggle:hover {
+            background: var(--gray-100);
+            color: var(--gray-800);
+        }
+
+        .page-title {
+            font-size: var(--font-size-2xl);
+            font-weight: 600;
+            color: var(--gray-800);
+            margin: 0;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-4);
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: var(--font-size-lg);
+            color: var(--gray-600);
+            cursor: pointer;
+            padding: var(--spacing-2);
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+        }
+
+        .notification-btn:hover {
+            background: var(--gray-100);
+            color: var(--gray-800);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--danger-color);
+            color: white;
+            font-size: var(--font-size-xs);
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: var(--spacing-8) var(--spacing-6);
+        }
+
+        /* Modern Cards */
+        .modern-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .modern-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            padding: var(--spacing-6);
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .card-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--gray-800);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+        }
+
+        .card-body {
+            padding: var(--spacing-6);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-6);
+            margin-bottom: var(--spacing-8);
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-6);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-xl);
+            margin-bottom: var(--spacing-4);
+        }
+
+        .stat-icon.primary { background: rgba(99, 102, 241, 0.1); color: var(--primary-color); }
+        .stat-icon.success { background: rgba(16, 185, 129, 0.1); color: var(--success-color); }
+        .stat-icon.warning { background: rgba(245, 158, 11, 0.1); color: var(--warning-color); }
+        .stat-icon.danger { background: rgba(239, 68, 68, 0.1); color: var(--danger-color); }
+
+        .stat-value {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: var(--spacing-2);
+        }
+
+        .stat-label {
+            font-size: var(--font-size-sm);
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .stat-change {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            margin-top: var(--spacing-2);
+        }
+
+        .stat-change.positive { color: var(--success-color); }
+        .stat-change.negative { color: var(--danger-color); }
+
+        /* Modern Buttons */
+        .btn-modern {
+            border-radius: var(--radius-lg);
+            font-weight: 500;
+            padding: var(--spacing-3) var(--spacing-5);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            text-decoration: none;
+        }
+
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary-modern {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-secondary-modern {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-success-modern {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            color: white;
+        }
+
+        /* Modern Tables */
+        .modern-table {
+            background: white;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .modern-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .modern-table th {
+            background: var(--gray-50);
+            color: var(--gray-700);
+            font-weight: 600;
+            font-size: var(--font-size-sm);
+            padding: var(--spacing-4);
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .modern-table td {
+            padding: var(--spacing-4);
+            border-bottom: 1px solid var(--gray-100);
+            font-size: var(--font-size-sm);
+            color: var(--gray-700);
+        }
+
+        .modern-table tbody tr:hover {
+            background: var(--gray-50);
+        }
+
+        .modern-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Sales Analysis Table Specific Styles */
+        #sales-analysis-table {
+            font-size: 0.75rem;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+        
+        #sales-analysis-table th {
+            background: var(--gray-700) !important;
+            color: white !important;
+            font-weight: 600;
+            padding: 8px 4px !important;
+            text-align: center;
+            white-space: normal;
+            line-height: 1.2;
+            height: auto;
+            min-height: 40px;
+            vertical-align: middle !important;
+            border: 1px solid var(--gray-600);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        #sales-analysis-table td {
+            padding: 6px 4px !important;
+            border: 1px solid var(--gray-200);
+            white-space: nowrap !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 120px;
+        }
+
+        /* Column Controls Styles */
+        #column-controls {
+            background: var(--gray-50) !important;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        #column-controls h6 {
+            margin-bottom: var(--spacing-3);
+            color: var(--gray-700);
+            font-weight: 600;
+        }
+        
+        #column-controls .form-check {
+            margin-right: var(--spacing-4);
+            margin-bottom: var(--spacing-2);
+        }
+        
+        #column-controls .form-check-label {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            cursor: pointer;
+        }
+        
+        #column-controls .form-check-input {
+            margin-top: 0.1rem;
+        }
+
+        /* Charts */
+        .chart-container {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-6);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            position: relative;
+            height: 400px;
+        }
+        
+        .chart-container canvas {
+            max-height: 350px !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-area {
+                padding: var(--spacing-4);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-300);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-400);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-500);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-brand">
+                <i class="fas fa-chart-line"></i>
+                <span class="brand-text">WB Analytics</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-nav">
+            <div class="nav-item">
+                <a href="#" class="nav-link active" data-tab="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span class="nav-text">Главная</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-tab="sales-analysis">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="nav-text">Анализ продаж</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-tab="financial-reports">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span class="nav-text">Финотчеты</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-tab="nomenclature">
+                    <i class="fas fa-boxes"></i>
+                    <span class="nav-text">Номенклатуры</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-tab="stock-balance">
+                    <i class="fas fa-warehouse"></i>
+                    <span class="nav-text">Остатки</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-tab="summary">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span class="nav-text">Сводные данные</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Top Navigation -->
+        <header class="top-nav">
+            <div class="top-nav-content">
+                <div class="d-flex align-items-center">
+                    <button class="nav-toggle" id="navToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title ms-3" id="pageTitle">Главная</h1>
+                </div>
+                
+                <div class="user-menu">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-modern btn-secondary-modern dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i>
+                            <span>Пользователь</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Профиль</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Настройки</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Выйти</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content fade-in-up">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-value" id="totalRevenue">₽0</div>
+                        <div class="stat-label">Общая выручка</div>
+                        <div class="stat-change positive" id="revenueChange">
+                            <i class="fas fa-arrow-up"></i> +12.5%
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-value" id="totalOrders">0</div>
+                        <div class="stat-label">Всего заказов</div>
+                        <div class="stat-change positive" id="ordersChange">
+                            <i class="fas fa-arrow-up"></i> +8.2%
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-value" id="avgMargin">0%</div>
+                        <div class="stat-label">Средняя маржа</div>
+                        <div class="stat-change negative" id="marginChange">
+                            <i class="fas fa-arrow-down"></i> -2.1%
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon danger">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="stat-value" id="totalProducts">0</div>
+                        <div class="stat-label">Товаров в продаже</div>
+                        <div class="stat-change positive" id="productsChange">
+                            <i class="fas fa-arrow-up"></i> +5.7%
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="row mb-4">
+                    <div class="col-lg-8">
+                        <div class="chart-container">
+                            <h5 class="card-title mb-4">
+                                <i class="fas fa-chart-area text-primary"></i>
+                                Динамика продаж
+                            </h5>
+                            <canvas id="salesChart" height="300"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="chart-container">
+                            <h5 class="card-title mb-4">
+                                <i class="fas fa-chart-pie text-success"></i>
+                                Распределение по категориям
+                            </h5>
+                            <canvas id="categoryChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="modern-card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="fas fa-clock text-info"></i>
+                            Последняя активность
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>Время</th>
+                                        <th>Действие</th>
+                                        <th>Детали</th>
+                                        <th>Статус</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentActivityTable">
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">
+                                            <div class="spinner mx-auto"></div>
+                                            Загрузка данных...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Analysis Tab -->
+            <div id="sales-analysis" class="tab-content" style="display: none;">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-4">
+                    <h2 class="page-title">Анализ продаж</h2>
+                    <div class="btn-toolbar">
+                        <div class="btn-group me-2" role="group">
+                            <button class="btn btn-modern btn-secondary-modern" onclick="toggleColumnVisibility()" title="Управление столбцами">
+                                <i class="fas fa-columns"></i> Столбцы
+                            </button>
+                            <button class="btn btn-modern btn-secondary-modern" onclick="resetTableZoom()" title="Сбросить масштаб">
+                                <i class="fas fa-search-minus"></i> 100%
+                            </button>
+                        </div>
+                        <div class="btn-group me-2" role="group">
+                            <button class="btn btn-modern btn-secondary-modern" onclick="zoomTable(0.8)" title="Уменьшить масштаб">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            <button class="btn btn-modern btn-secondary-modern" onclick="zoomTable(1.2)" title="Увеличить масштаб">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-modern btn-primary-modern" onclick="recalculateSales()">
+                            <i class="fas fa-calculator"></i> Пересчитать
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Column Visibility Controls -->
+                <div id="column-controls" class="modern-card mb-4" style="display: none;">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">Управление видимостью столбцов</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="column-checkboxes">
+                            <!-- Checkboxes will be populated by JavaScript -->
+                        </div>
+                        <div class="mt-3">
+                            <button class="btn btn-modern btn-secondary-modern" onclick="showAllColumns()">Показать все</button>
+                            <button class="btn btn-modern btn-secondary-modern" onclick="hideAllColumns()">Скрыть все</button>
+                            <button class="btn btn-modern btn-success-modern" onclick="applyColumnVisibility()">Применить</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zoom Controls -->
+                <div class="mb-3">
+                    <span class="form-label">Масштаб таблицы: <span id="zoom-percentage">100%</span></span>
+                </div>
+
+                <div class="modern-card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table modern-table" id="sales-analysis-table">
+                                <thead>
+                                    <tr>
+                                        <th title="Бренд товара">Бренд</th>
+                                        <th title="Предмет/категория товара">Предмет</th>
+                                        <th title="Артикул товара">Артикул</th>
+                                        <th title="Размер товара">Размер</th>
+                                        <th title="Баркод товара">Баркод</th>
+                                        <th title="Остаток в пути до клиента">В пути до<br>клиента</th>
+                                        <th title="Остаток в пути от клиента">В пути от<br>клиента</th>
+                                        <th title="Остаток на складах">На складах</th>
+                                        <th title="Общий остаток на WB">ИТОГО остаток<br>на ВБ</th>
+                                        <th title="Оборачиваемость в днях">Оборачиваемость,<br>дней</th>
+                                        <th title="Количество заказов">Заказы, шт</th>
+                                        <th title="Количество отказов">Отказы</th>
+                                        <th title="Количество продаж">Продажи, шт</th>
+                                        <th title="Количество возвратов">Возвраты, шт</th>
+                                        <th title="Продажи минус возвраты">Продажи минус<br>возвраты</th>
+                                        <th title="Процент выкупа">Процент<br>выкупа</th>
+                                        <th title="Возврат поставщику">Возврат, шт</th>
+                                        <th title="Логистика за возвраты">Логистика за<br>возвраты</th>
+                                        <th title="Продажи по ценам до СПП">Продажи по ценам<br>до СПП</th>
+                                        <th title="Продажи по ценам с СПП">Продажи по ценам<br>с СПП</th>
+                                        <th title="Продажи за вычетом комиссии">Продажи за вычетом<br>комиссии</th>
+                                        <th title="Продажи за вычетом комиссии без учета возвратов">Продажи за вычетом<br>комиссии (без учета<br>возвратов)</th>
+                                        <th title="Сумма возвратов">Возвраты</th>
+                                        <th title="Продажи минус возвраты (сумма)">Продажи минус<br>возвраты</th>
+                                        <th title="Комиссия в рублях">Комиссия, руб</th>
+                                        <th title="Процент комиссии">Комиссия %</th>
+                                        <th title="Логистика">Логистика</th>
+                                        <th title="Логистика на 1 продажу">Логистика на<br>1 продажу</th>
+                                        <th title="Эквайринг">Эквайринг</th>
+                                        <th title="Штрафы">Штраф</th>
+                                        <th title="Доплаты">Доплаты</th>
+                                        <th title="Компенсация подмен">Компенсация<br>подмен</th>
+                                        <th title="Возмещение брака">Возмещение<br>брака</th>
+                                        <th title="Средний чек">Средний чек</th>
+                                        <th title="Себестоимость 1 штуки">Себестоимость<br>1 шт</th>
+                                        <th title="Себестоимость проданного товара">Себестоимость<br>проданного товара</th>
+                                        <th title="Маржа до налогов">Маржа до<br>налогов</th>
+                                        <th title="Налог 6%">Налог 6%</th>
+                                        <th title="Маржа после налогов">Маржа после<br>налогов, руб</th>
+                                        <th title="Маржа на 1 продажу">Маржа на<br>1 продажу, руб</th>
+                                        <th title="Маржинальность в процентах">Маржинальность, %</th>
+                                        <th title="ROI от себестоимости">ROI от<br>себестоимости, %</th>
+                                        <th title="GMROI">GMROI, %</th>
+                                        <th title="Доля от общей выручки">Доля от общей<br>выручки, %</th>
+                                        <th title="Доля от общей маржи">Доля от общей<br>маржи, %</th>
+                                        <th title="ABC анализ по себестоимости">По<br>себестоимости</th>
+                                        <th title="ABC анализ по цене за вычетом комиссии">По цене за<br>вычетом комиссии</th>
+                                        <th title="ABC анализ по средней марже">По средней<br>марже</th>
+                                        <th title="Деньги в товаре">Деньги в<br>товаре</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sales-analysis-tbody">
+                                    <tr>
+                                        <td colspan="48" class="text-center text-muted">
+                                            <div class="spinner mx-auto"></div>
+                                            Загрузка данных...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other tabs will be added here -->
+            <div id="financial-reports" class="tab-content" style="display: none;">
+                <div class="modern-card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="fas fa-file-invoice-dollar text-primary"></i>
+                            Финансовые отчеты
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table modern-table" id="financial-reports-table">
+                                <thead>
+                                    <tr>
+                                        <th>№</th>
+                                        <th>Номер поставки</th>
+                                        <th>Предмет</th>
+                                        <th>Бренд</th>
+                                        <th>Артикул поставщика</th>
+                                        <th>Название</th>
+                                        <th>Размер</th>
+                                        <th>Кол-во</th>
+                                        <th>Цена розничная</th>
+                                        <th>Дата продажи</th>
+                                        <th>К перечислению</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="financial-reports-tbody">
+                                    <tr>
+                                        <td colspan="11" class="text-center text-muted">
+                                            <div class="spinner mx-auto"></div>
+                                            Загрузка данных...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="nomenclature" class="tab-content" style="display: none;">
+                <div class="modern-card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="fas fa-boxes text-success"></i>
+                            Номенклатуры
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table modern-table" id="nomenclature-table">
+                                <thead>
+                                    <tr>
+                                        <th>Бренд</th>
+                                        <th>Предмет</th>
+                                        <th>Код размера</th>
+                                        <th>Артикул продавца</th>
+                                        <th>Артикул WB</th>
+                                        <th>Размер</th>
+                                        <th>Баркод</th>
+                                        <th>Комплектация</th>
+                                        <th>Себестоимость</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="nomenclature-tbody">
+                                    <tr>
+                                        <td colspan="9" class="text-center text-muted">
+                                            <div class="spinner mx-auto"></div>
+                                            Загрузка данных...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="stock-balance" class="tab-content" style="display: none;">
+                <div class="modern-card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="fas fa-warehouse text-warning"></i>
+                            Остатки товаров
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table modern-table" id="stock-balance-table">
+                                <thead>
+                                    <tr>
+                                        <th>Бренд</th>
+                                        <th>Предмет</th>
+                                        <th>Артикул</th>
+                                        <th>Размер</th>
+                                        <th>В пути до клиента</th>
+                                        <th>В пути от клиента</th>
+                                        <th>На складах</th>
+                                        <th>ИТОГО остаток</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stock-balance-tbody">
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted">
+                                            <div class="spinner mx-auto"></div>
+                                            Загрузка данных...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="summary" class="tab-content" style="display: none;">
+                <div class="modern-card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="fas fa-clipboard-list text-info"></i>
+                            Сводные данные
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table modern-table" id="summary-table">
+                                <thead>
+                                    <tr>
+                                        <th>Показатель</th>
+                                        <th>Значение</th>
+                                        <th>Единица измерения</th>
+                                        <th>Дата обновления</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="summary-tbody">
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">
+                                            <div class="spinner mx-auto"></div>
+                                            Загрузка данных...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/app.js' %}"></script>
+    <script>
+        // Инициализация приложения после загрузки DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM загружен, инициализируем приложение...');
+            initializeApp();
+        });
+    </script>
+</body>
+</html>

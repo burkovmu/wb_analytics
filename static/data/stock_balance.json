@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "brand": "Best home smart",
+    "subject": "Тонометры",
+    "size": "0.0",
+    "supplier_article": "tonometr",
+    "wb_article": "WB-123456",
+    "barcode": "2045383440331.0",
+    "in_transit_to_client": 0,
+    "in_transit_from_client": 0,
+    "in_warehouses": 0,
+    "total_stock_wb": 0
+  },
+  {
+    "id": 2,
+    "brand": "Best home smart",
+    "subject": "Ингаляторы",
+    "size": "0.0",
+    "supplier_article": "ingaliator",
+    "wb_article": "WB-123457",
+    "barcode": "2045803009391.0",
+    "in_transit_to_client": 0,
+    "in_transit_from_client": 0,
+    "in_warehouses": 0,
+    "total_stock_wb": 0
+  }
+]
